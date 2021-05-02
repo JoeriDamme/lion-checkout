@@ -1,6 +1,10 @@
 import { LitElement, html, css } from 'lit-element';
 
 export class CheckoutOverview extends LitElement {
+
+  // Steps that are required to go forward in flow.
+  static steps = ['Overview', 'Address', 'Payment', 'Confirmation'];
+
   static get styles() {
     return css`
       :host img {
@@ -72,16 +76,16 @@ export class CheckoutOverview extends LitElement {
           <h1>Summary</h1>
           <div>
             <strong>Subtotal (# item)</strong>
-            <div><span>€</span><span>${this.data.basketSummary && this.data.basketSummary.price}</span></div>
+            <div><span>Points:</span><span>${this.data.basketSummary && this.data.basketSummary.price}</span></div>
           </div>
           <div>
             <strong>Extra Costs</strong>
-            <div><span>€</span><span>${this.data.basketSummary && this.data.basketSummary.extraCostValue}</span></div>
+            <div><span>Points:</span><span>${this.data.basketSummary && this.data.basketSummary.extraCostValue}</span></div>
             <hr>
           </div>
           <div>
             <strong>Order Total</strong>
-            <div><span>€</span><span>${this.data.basketSummary && this.data.basketSummary.totalPrice}</span></div>
+            <div><span>Points:</span><span>${this.data.basketSummary && this.data.basketSummary.totalPrice}</span></div>
           </div>
         </div>
       </div>
