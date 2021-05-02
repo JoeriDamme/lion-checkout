@@ -84,7 +84,7 @@ class LionCheckout extends LitElement {
         break;
       case 2: 
         result = html`
-          <checkout-payment-form></checkout-payment-form>
+          <checkout-payment-form totalPrice=${this.basketData.basketSummary.totalPrice}></checkout-payment-form>
         `;
         break;
       case 3: 

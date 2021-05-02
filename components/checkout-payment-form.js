@@ -1,8 +1,25 @@
-import { LitElement, html } from '@lion/core';
+import { LitElement, html, css } from '@lion/core';
 import { ajax } from '@lion/ajax';
 import './checkout-select-bankaccount';
 
 export class CheckoutPaymentForm extends LitElement {
+
+  static get styles() {
+    return css`
+      :host .alert {
+        border: 1px solid #f9c1c1;
+        padding: 5px;
+      }
+      
+      :host .alert-danger {
+        background-color: #fbbbbb;;
+      }
+
+      :host .select-bank {
+        margin-bottom: 10px;
+      }
+    `
+  }
 
   /**
    * Get properties.
@@ -15,6 +32,9 @@ export class CheckoutPaymentForm extends LitElement {
       selectedAccount: {
         type: Object,
       },
+      totalPrice: {
+        type: Number,
+      }
     }
   }
 
@@ -59,17 +79,50 @@ export class CheckoutPaymentForm extends LitElement {
     return response.body;
   }
 
+  /**
+   * Is balance on selected bank account sufficient.
+   * @returns {Boolean}
+   */
+  hasBalance() {
+    return this.totalPrice < this.selectedAccount.balance;
+  }
+
+  /**
+   * When property update, check if selected account has been changed.
+   * If no balance, disable next button.
+   * @param {Map} changedProperties 
+   */
+  update(changedProperties) {
+    super.update(changedProperties);
+
+    // changedProperties is Map type.
+    if (changedProperties.has('selectedAccount')) {
+      const nameEvent = this.hasBalance() ? 'enableNextStep' : 'disableNextStep';
+
+      this.dispatchEvent(new CustomEvent(nameEvent, {
+        composed: true,
+      }));
+    }
+  }
+
   render() {
     return html`
       <link rel="stylesheet" href="../node_modules/flexboxgrid/css/flexboxgrid.css" type="text/css"> 
       <div class="row">
         <div class="col-xs-12">
           <h1>Choose a payment method</h1>
-          <checkout-select-bank-account 
-            .options=${this.accounts} 
-            .defaultSelect=${0}
-          >
-          </checkout-select-bank-account>
+          <div class="select-bank">
+            <checkout-select-bank-account 
+              .options=${this.accounts} 
+              .defaultSelect=${0}
+            ></checkout-select-bank-account>
+          </div>
+          <span>Your balance on this account is: </span><span><strong>${this.selectedAccount && this.selectedAccount.balance}</strong></span>
+          ${this.selectedAccount && !this.hasBalance() ? html`
+            <div class="alert alert-danger">
+              Insufficient Balance. Please select a different account.
+            </div>
+          ` : html``}
         </div>
       </div>
     `;
