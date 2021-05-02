@@ -32,6 +32,7 @@ export class CheckoutConfirmation extends LitElement {
   constructor() {
     super();
     this.basketData = {};
+    this.address = {};
   }
 
   render() {
@@ -59,6 +60,10 @@ export class CheckoutConfirmation extends LitElement {
       </div>
 
       <h2>Your order will be send to:</h2>
+      <p>Street: ${this.address.street} ${this.address.houseNumber}${this.address.houseNumberAddition}</p>
+      <p>Postcal Code: ${this.address.postalCode}</p>
+      <p>City: ${this.address.city}</p>
+      <p>Email: ${this.address.email}</p>
     `;
   }
 }
