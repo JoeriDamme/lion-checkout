@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, css, html } from '@lion/core';
 
 export class CheckoutOverview extends LitElement {
 
