@@ -67,7 +67,7 @@ class LionCheckout extends LitElement {
     switch(this.currentStep) {
       case 1: 
         result = html`
-          <checkout-address-form></checkout-address-form>
+          <checkout-address-form .onlyVoucher=${this.hasOnlyVoucher()}></checkout-address-form>
         `;
         break;
       case 2: 
@@ -139,6 +139,14 @@ class LionCheckout extends LitElement {
   async fetchBasket() {
     const response = await ajax.requestJson('../mock-data.json');
     return response.body;
+  }
+
+  /**
+   * Check if there are only vouchers in basket.
+   * @returns {Boolean}
+   */
+  hasOnlyVoucher() {
+    return !this.basketData.basket.filter(item => item.fulfillmentType !== 'VOUCHER').length
   }
 
   render() {

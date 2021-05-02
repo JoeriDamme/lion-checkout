@@ -13,8 +13,8 @@ export class CheckoutAddressForm extends LitElement {
    */
   static get properties() {
     return {
-      data: {
-        type: Object
+      onlyVoucher: {
+        type: Boolean
       }
     }
   }
@@ -22,13 +22,14 @@ export class CheckoutAddressForm extends LitElement {
   constructor() {
     super();
     loadDefaultFeedbackMessages();
-    this.data = {};
+    this.onlyVoucher = false;
     this.formData = {
       street: '',
       houseNumber: '',
       houseNumberAddition: '',
       postalCode: '',
       city: '',
+      email: '',
     }
   }
 
@@ -36,6 +37,7 @@ export class CheckoutAddressForm extends LitElement {
     try {
       this.data = await this.fetchPersonalDetails();
       this.setFormdata();
+      console.log(this.onlyVoucher);
     } catch (e) {
       console.log(e);
     }
@@ -77,6 +79,7 @@ export class CheckoutAddressForm extends LitElement {
       houseNumberAddition: address.houseNumberAddition,
       postalCode: address.postalCode,
       city: address.city,
+      email: this.data.personalEmailAddress,
     }
 
     // trigger render
@@ -118,6 +121,7 @@ export class CheckoutAddressForm extends LitElement {
             <form>
               <lion-fieldset name="checkoutAddress">
                 <lion-input
+                  .hidden=${this.onlyVoucher}
                   name="street"
                   label="Street" 
                   .modelValue=${this.formData.street}
@@ -126,6 +130,7 @@ export class CheckoutAddressForm extends LitElement {
                 >
                 </lion-input>
                 <lion-input
+                  .hidden=${this.onlyVoucher}
                   name="houseNumber"
                   label="House Number"
                   .modelValue=${this.formData.houseNumber}
@@ -134,11 +139,13 @@ export class CheckoutAddressForm extends LitElement {
                 >
                 </lion-input>
                 <lion-input
+                  .hidden=${this.onlyVoucher}
                   name="houseNumberAddition" label="House Number Addition" 
-                  @model-value-changed=${() =>this.handleChange()}
+                  @model-value-changed=${() => this.handleChange()}
                   .modelValue=${this.formData.houseNumberAddition}>
                 </lion-input>
                 <lion-input
+                  .hidden=${this.onlyVoucher}
                   name="postalCode"
                   label="Postal Code" 
                   .modelValue=${this.formData.postalCode}
@@ -146,9 +153,17 @@ export class CheckoutAddressForm extends LitElement {
                   .validators="${[new Required()]}">
                 </lion-input>
                 <lion-input
+                  .hidden=${this.onlyVoucher}
                   name="city"
                   label="City"
                   .modelValue=${this.formData.city}
+                  @model-value-changed=${() => this.handleChange()}
+                  .validators="${[new Required()]}">
+                </lion-input>
+                <lion-input
+                  name="email"
+                  label="Email Address"
+                  .modelValue=${this.formData.email}
                   @model-value-changed=${() => this.handleChange()}
                   .validators="${[new Required()]}">
                 </lion-input>
