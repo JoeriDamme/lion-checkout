@@ -95,11 +95,23 @@ class LionCheckout extends LitElement {
   }
 
   /**
+   * Sort array by key. Native solution from Lodash.
+   * @param {string} key 
+   * @returns {Array} sorted array by key.
+   */
+  sortBy(arr, key) {
+    return arr.concat().sort((a, b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0));
+  }
+
+  /**
    * Get the basket data on load.
    */
   async firstUpdated() {
     try {
-      this.basketData = await this.fetchBasket()
+      const data = await this.fetchBasket();
+      // sort on fulfillmentType
+      data.basket = this.sortBy(data.basket, 'fulfillmentType');
+      this.basketData = data;
     } catch (error) {
       // TODO: handle error
       console.log(error);
