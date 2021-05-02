@@ -106,7 +106,7 @@ class LionCheckout extends LitElement {
     this.currentStep = checkoutSteps.current;
   }
 
-  handleNextStepClick() {
+  async handleNextStepClick() {
     const checkoutSteps = this.shadowRoot.querySelector('checkout-steps');
 
     // get data from every step
@@ -115,6 +115,10 @@ class LionCheckout extends LitElement {
       const element = this.shadowRoot.querySelector('checkout-address-form');
       // information is stored in the property formData
       this.stepData['address'] = element.formData;
+    } else if (this.currentStep === 2) {
+      const element = this.shadowRoot.querySelector('checkout-payment-form');
+      this.stepData['account'] = element.selectedAccount;
+      await this.postOrder();
     }
 
     // go to next step
@@ -169,6 +173,24 @@ class LionCheckout extends LitElement {
     try {
       await ajax.request('http://localhost/api/basket/', {
         method: 'PATCH',
+        headers: {
+          authorization: 'Bearer some_random_jwt',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.stepData)
+      });
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+    /**
+   * Fake call to reserve basket.
+   */
+  async postOrder() {
+    try {
+      await ajax.request('http://localhost/api/basket/order', {
+        method: 'POST',
         headers: {
           authorization: 'Bearer some_random_jwt',
           'Content-Type': 'application/json',
