@@ -6,8 +6,10 @@
   "module": "lion-checkout.js",
   "type": "module",
   "scripts": {
-    "serve": "wds --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "wds --watch --open",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist && rollup -c rollup.config.js",
+    "start:build": "npm run build && wds dist/index.html --open"
   },
   "repository": {
     "type": "git",
@@ -24,8 +26,12 @@
     "lit-element": "^2.4.0"
   },
   "devDependencies": {
+    "@open-wc/building-rollup": "^1.10.0",
     "@web/dev-server": "^0.1.16",
     "@webcomponents/webcomponentsjs": "^2.5.0",
-    "eslint": "^7.25.0"
+    "deepmerge": "^4.2.2",
+    "eslint": "^7.25.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.46.0"
   }
 }
