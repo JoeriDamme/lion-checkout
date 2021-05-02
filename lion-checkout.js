@@ -89,7 +89,7 @@ class LionCheckout extends LitElement {
         break;
       case 3: 
         result = html`
-          <checkout-confirmation></checkout-confirmation>
+          <checkout-confirmation .basketData=${this.basketData} .address=${this.stepData.address  }></checkout-confirmation>
         `;
         break;
     }
