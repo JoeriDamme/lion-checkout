@@ -12,12 +12,21 @@ export class CheckoutPaymentForm extends LitElement {
       accounts: {
         type: Array,
       },
+      selectedAccount: {
+        type: Object,
+      },
     }
   }
 
   constructor() {
     super();
     this.accounts = [];
+
+    // listen to the changes on the bank account rich select.
+    this.addEventListener('changeBankAccount', (e) => {
+      const { detail } = e;
+      this.selectedAccount = this.accounts.find(account => account.accountId === detail.value.accountId);
+    });
   }
 
   /**
@@ -28,6 +37,8 @@ export class CheckoutPaymentForm extends LitElement {
     try {
       const result = await this.fetchBankAccounts();
       this.accounts = result.accounts;
+      // first item in array will be the default selected bank account.
+      this.selectedAccount = this.accounts[0];
 
       // when entering the page, reserve the basket
       this.dispatchEvent(new CustomEvent('reserveBasket', {
@@ -56,6 +67,7 @@ export class CheckoutPaymentForm extends LitElement {
           <h1>Choose a payment method</h1>
           <checkout-select-bank-account 
             .options=${this.accounts} 
+            .defaultSelect=${0}
           >
           </checkout-select-bank-account>
         </div>
