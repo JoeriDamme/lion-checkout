@@ -106,6 +106,12 @@ class LionCheckout extends LitElement {
     }
   }
 
+  isBasketEmpty() {
+    const result =  this.basket && this.basket.basket && !this.basket.basket.length;
+    this.disableButton = result;
+    return result;
+  }
+
   /**
    * Get basket content.
    * @returns Promise<object>
@@ -126,8 +132,8 @@ class LionCheckout extends LitElement {
       </div>
 
       <div class="checkout-content">
-          ${this.getHtmlStep()}
-        </div>
+        ${this.isBasketEmpty() ? html`<p>Nothing in basket</p>` : this.getHtmlStep()}
+      </div>
 
       <div class="row col-xs-12 checkout-buttons">
         <checkout-button
