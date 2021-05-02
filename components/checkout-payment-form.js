@@ -24,11 +24,15 @@ export class CheckoutPaymentForm extends LitElement {
    * Get the basket data on load.
    */
   async firstUpdated() {
-
     // fetch all required information for checkout.
     try {
       const result = await this.fetchBankAccounts();
       this.accounts = result.accounts;
+
+      // when entering the page, reserve the basket
+      this.dispatchEvent(new CustomEvent('reserveBasket', {
+        composed: true,
+      }));
     } catch (error) {
       // TODO: handle error
       console.log(error);

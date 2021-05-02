@@ -61,6 +61,10 @@ class LionCheckout extends LitElement {
     this.addEventListener('enableNextStep', () => {
       this.disableButton = false;
     });
+
+    this.addEventListener('reserveBasket', async () => {
+      await this.patchReservationBasket()
+    });
   }
 
     /**
@@ -156,6 +160,26 @@ class LionCheckout extends LitElement {
   async fetchBasket() {
     const response = await ajax.requestJson('../mock-data.json');
     return response.body;
+  }
+
+  /**
+   * Fake call to reserve basket.
+   */
+  async patchReservationBasket() {
+    try {
+      await ajax.request('http://localhost/api/basket/', {
+        method: 'PATCH',
+        headers: {
+          authorization: 'Bearer some_random_jwt',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          reserve: true,
+        })
+      });
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   /**
