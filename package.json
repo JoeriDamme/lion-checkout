@@ -1,0 +1,41 @@
+{
+  "name": "lion-checkout",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lion-checkout.js",
+  "module": "lion-checkout.js",
+  "type": "module",
+  "scripts": {
+    "dev": "wds --watch --open",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist && rollup -c rollup.config.js",
+    "start:build": "npm run build && wds dist/index.html --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoeriDamme/lion-checkout.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoeriDamme/lion-checkout/issues"
+  },
+  "homepage": "https://github.com/JoeriDamme/lion-checkout#readme",
+  "dependencies": {
+    "@lion/ajax": "^0.10.0",
+    "@lion/button": "^0.12.0",
+    "@lion/icon": "^0.12.0",
+    "@lion/steps": "^0.8.3",
+    "flexboxgrid": "^6.3.1"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.13.14",
+    "@open-wc/building-rollup": "^1.10.0",
+    "@web/dev-server": "^0.1.16",
+    "@webcomponents/webcomponentsjs": "^2.5.0",
+    "deepmerge": "^4.2.2",
+    "eslint": "^7.25.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.46.0"
+  }
+}
