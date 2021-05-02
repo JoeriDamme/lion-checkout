@@ -23,6 +23,7 @@
   "homepage": "https://github.com/JoeriDamme/lion-checkout#readme",
   "dependencies": {
     "@lion/ajax": "^0.10.0",
+    "flexboxgrid": "^6.3.1",
     "lit": "2.0.0-rc.1",
     "lit-element": "^2.4.0"
   },

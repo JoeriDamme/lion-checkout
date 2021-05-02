@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import { ajax } from '@lion/ajax';
+import './components/checkout-overview';
 
 class LionCheckout extends LitElement {
   /**
@@ -43,7 +44,7 @@ class LionCheckout extends LitElement {
 
   render() {
     return html`
-      <p>test p x x</p>
+      <checkout-overview .data=${this.basket}></checkout-overview>
     `
   }
 }
