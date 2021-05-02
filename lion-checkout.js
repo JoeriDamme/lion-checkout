@@ -4,6 +4,9 @@ import './components/checkout-overview';
 import './components/checkout-steps';
 import './components/checkout-step';
 import './components/checkout-button';
+import './components/checkout-address-form';
+import './components/checkout-payment-form';
+import './components/checkout-confirmation';
 
 class LionCheckout extends LitElement {
 
@@ -20,12 +23,28 @@ class LionCheckout extends LitElement {
       basket: {
         type: Object
       },
+      currentStep: {
+        type: Number
+      },
+      disableButton: {
+        type: Boolean
+      }
     }
   }
 
   constructor() {
     super();
     this.basket = {};
+    this.currentStep = 0;
+    this.disableButton = false;
+
+    this.addEventListener('disableNextStep', () => {
+      this.disableButton = true;
+    });
+
+    this.addEventListener('enableNextStep', () => {
+      this.disableButton = false;
+    });
   }
 
   /**
@@ -44,20 +63,57 @@ class LionCheckout extends LitElement {
    async firstUpdated() {
     try {
       this.basket = await this.fetchBasket();
-      console.log(this.basket);
     } catch (error) {
       // TODO: handle error
       console.log(error);
     }
   }
 
+    /**
+   * Load the HTML for the current step in the checkout flow.
+   * @returns TemplateResult
+   */
+  getHtmlStep() {
+    let result = html`
+      <checkout-overview .data=${this.basket}></checkout-overview>
+    `;
+
+    switch(this.currentStep) {
+      case 1: 
+        result = html`
+          <checkout-address-form></checkout-address-form>
+        `;
+        break;
+      case 2: 
+        result = html`
+          <checkout-payment-form></checkout-payment-form>
+        `;
+        break;
+      case 3: 
+        result = html`
+          <checkout-confirmation></checkout-confirmation>
+        `;
+        break;
+    }
+
+    return result;
+  }
+
 
   handlePreviousStepClick() {
-    // do something
+    const checkoutSteps = this.shadowRoot.querySelector('checkout-steps');
+    // go to previous step
+    checkoutSteps.previous();
+    // update property currentStep
+    this.currentStep = checkoutSteps.current;
   }
 
   handleNextStepClick() {
-    // do something
+    const checkoutSteps = this.shadowRoot.querySelector('checkout-steps');
+    // go to next step
+    checkoutSteps.next();
+    // update property currentStep
+    this.currentStep = checkoutSteps.current;
   }
 
   render() {
@@ -69,7 +125,10 @@ class LionCheckout extends LitElement {
           `)}
         </checkout-steps>
       </div>
-      <checkout-overview .data=${this.basket}></checkout-overview>
+
+      <div class="checkout-content">
+          ${this.getHtmlStep()}
+        </div>
 
       <div class="row col-xs-12 checkout-buttons">
         <checkout-button
