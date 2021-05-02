@@ -6,6 +6,7 @@ import './components/checkout-button';
 import './components/checkout-address-form';
 import './components/checkout-payment-form';
 import './components/checkout-confirmation';
+import { ajax } from '@lion/ajax';
 
 class LionCheckout extends LitElement {
 
@@ -91,6 +92,27 @@ class LionCheckout extends LitElement {
     checkoutSteps.next();
     // update property currentStep
     this.currentStep = checkoutSteps.current;
+  }
+
+  /**
+   * Get the basket data on load.
+   */
+  async firstUpdated() {
+    try {
+      this.basket = await this.fetchBasket()
+    } catch (error) {
+      // TODO: handle error
+      console.log(error);
+    }
+  }
+
+  /**
+   * Get basket content.
+   * @returns Promise<object>
+   */
+  async fetchBasket() {
+    const response = await ajax.requestJson('../mock-data.json');
+    return response.body;
   }
 
   render() {
