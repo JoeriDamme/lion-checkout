@@ -37,7 +37,6 @@ export class CheckoutAddressForm extends LitElement {
     try {
       this.data = await this.fetchPersonalDetails();
       this.setFormdata();
-      console.log(this.onlyVoucher);
     } catch (e) {
       console.log(e);
     }

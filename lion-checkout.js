@@ -42,9 +42,17 @@ class LionCheckout extends LitElement {
 
   constructor() {
     super();
+    // data from basket endpoint
     this.basketData = {};
+
+    // keep track of current step
     this.currentStep = 0;
+
+    // disable next button
     this.disableButton = false;
+
+    // will keep track of data of every step
+    this.stepData = {};
 
     this.addEventListener('disableNextStep', () => {
       this.disableButton = true;
@@ -96,6 +104,15 @@ class LionCheckout extends LitElement {
 
   handleNextStepClick() {
     const checkoutSteps = this.shadowRoot.querySelector('checkout-steps');
+
+    // get data from every step
+    if (this.currentStep === 1) {
+      // get address information
+      const element = this.shadowRoot.querySelector('checkout-address-form');
+      // information is stored in the property formData
+      this.stepData['address'] = element.formData;
+    }
+
     // go to next step
     checkoutSteps.next();
     // update property currentStep
