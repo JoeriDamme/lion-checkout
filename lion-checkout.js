@@ -20,7 +20,7 @@ class LionCheckout extends LitElement {
    */
   static get properties() {
     return {
-      basket: {
+      basketData: {
         type: Object
       },
       currentStep: {
@@ -34,7 +34,7 @@ class LionCheckout extends LitElement {
 
   constructor() {
     super();
-    this.basket = {};
+    this.basketData = {};
     this.currentStep = 0;
     this.disableButton = false;
 
@@ -53,7 +53,7 @@ class LionCheckout extends LitElement {
    */
   getHtmlStep() {
     let result = html`
-      <checkout-overview .data=${this.basket}></checkout-overview>
+      <checkout-overview .data=${this.basketData}></checkout-overview>
     `;
 
     switch(this.currentStep) {
@@ -99,7 +99,7 @@ class LionCheckout extends LitElement {
    */
   async firstUpdated() {
     try {
-      this.basket = await this.fetchBasket()
+      this.basketData = await this.fetchBasket()
     } catch (error) {
       // TODO: handle error
       console.log(error);
@@ -107,7 +107,7 @@ class LionCheckout extends LitElement {
   }
 
   isBasketEmpty() {
-    const result =  this.basket && this.basket.basket && !this.basket.basket.length;
+    const result =  this.basketData && this.basketData.basket && !this.basketData.basket.length;
     this.disableButton = result;
     return result;
   }
