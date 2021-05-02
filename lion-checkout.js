@@ -1,4 +1,4 @@
-import { LitElement, html } from '@lion/core';
+import { LitElement, html, css } from '@lion/core';
 import './components/checkout-overview';
 import './components/checkout-steps';
 import './components/checkout-step';
@@ -14,6 +14,14 @@ class LionCheckout extends LitElement {
    * Steps needed to go through the flow.
    */
   static steps = ['Overview', 'Address', 'Payment', 'Confirmation'];
+
+  static get styles() {
+    return css`
+      :host .checkout-content {
+        margin-bottom: 10px;
+      }
+    `
+  }
 
   /**
    * Get properties.
@@ -144,7 +152,10 @@ class LionCheckout extends LitElement {
       </div>
 
       <div class="checkout-content">
-        ${this.isBasketEmpty() ? html`<p>Nothing in basket</p>` : this.getHtmlStep()}
+        ${this.isBasketEmpty() ? html`
+          <p>Nothing in basket</p>
+          <checkout-button @click=${() => alert('back to homepage')}>Go back to homepage</checkout-button>
+        ` : this.getHtmlStep()}
       </div>
 
       <div class="row col-xs-12 checkout-buttons">
