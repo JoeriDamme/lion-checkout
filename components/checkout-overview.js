@@ -7,7 +7,7 @@ export class CheckoutOverview extends LitElement {
 
   static get styles() {
     return css`
-      :host img {
+      :host table img {
         width: 150px;
       }
 

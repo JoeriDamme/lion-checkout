@@ -89,7 +89,7 @@ class LionCheckout extends LitElement {
         break;
       case 3: 
         result = html`
-          <checkout-confirmation></checkout-confirmation>
+          <checkout-confirmation .basketData=${this.basketData} .address=${this.stepData.address }></checkout-confirmation>
         `;
         break;
     }
@@ -210,7 +210,7 @@ class LionCheckout extends LitElement {
       <div class="row col-xs-12 checkout-buttons">
         <checkout-button
           @click=${() => this.handlePreviousStepClick()}
-          ?hidden=${!this.currentStep}
+          ?hidden=${!this.currentStep || this.currentStep === LionCheckout.steps.length - 1}
         >
           Previous
         </checkout-button>
@@ -222,6 +222,11 @@ class LionCheckout extends LitElement {
         >
           ${this.currentStep === 2 ? `Confirm` : `Next` }
         </checkout-button>
+
+        <checkout-button
+          @click=${() => alert('back to homepage')}
+          ?hidden=${this.currentStep !== LionCheckout.steps.length - 1}
+        >Go back to homepage</checkout-button>
       </div>
     `
   }

@@ -50,7 +50,7 @@ export class CheckoutPaymentForm extends LitElement {
    * If no balance, disable next button.
    * @param {Map} changedProperties 
    */
-    update(changedProperties) {
+  update(changedProperties) {
     super.update(changedProperties);
 
     // changedProperties is Map type.
