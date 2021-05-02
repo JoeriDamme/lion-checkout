@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@web/dev-server": "^0.1.16",
-    "@webcomponents/webcomponentsjs": "^2.5.0"
+    "@webcomponents/webcomponentsjs": "^2.5.0",
+    "eslint": "^7.25.0"
   }
 }
