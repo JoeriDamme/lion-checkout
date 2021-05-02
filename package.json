@@ -23,6 +23,7 @@
   "homepage": "https://github.com/JoeriDamme/lion-checkout#readme",
   "dependencies": {
     "@lion/ajax": "^0.10.0",
+    "@lion/button": "^0.12.0",
     "@lion/icon": "^0.12.0",
     "@lion/steps": "^0.8.3",
     "flexboxgrid": "^6.3.1"

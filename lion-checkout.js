@@ -3,6 +3,7 @@ import { ajax } from '@lion/ajax';
 import './components/checkout-overview';
 import './components/checkout-steps';
 import './components/checkout-step';
+import './components/checkout-button';
 
 class LionCheckout extends LitElement {
 
@@ -50,6 +51,15 @@ class LionCheckout extends LitElement {
     }
   }
 
+
+  handlePreviousStepClick() {
+    // do something
+  }
+
+  handleNextStepClick() {
+    // do something
+  }
+
   render() {
     return html`
       <div class="row col-xs-12">
@@ -60,6 +70,23 @@ class LionCheckout extends LitElement {
         </checkout-steps>
       </div>
       <checkout-overview .data=${this.basket}></checkout-overview>
+
+      <div class="row col-xs-12 checkout-buttons">
+        <checkout-button
+          @click=${() => this.handlePreviousStepClick()}
+          ?hidden=${!this.currentStep}
+        >
+          Previous
+        </checkout-button>
+
+        <checkout-button
+          @click=${() => this.handleNextStepClick()}
+          ?disabled=${this.disableButton}
+          ?hidden=${this.currentStep === LionCheckout.steps.length - 1}
+        >
+          Next
+        </checkout-button>
+      </div>
     `
   }
 }
