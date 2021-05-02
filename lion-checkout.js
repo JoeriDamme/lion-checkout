@@ -36,7 +36,7 @@ class LionCheckout extends LitElement {
       },
       disableButton: {
         type: Boolean
-      }
+      },
     }
   }
 
@@ -152,7 +152,7 @@ class LionCheckout extends LitElement {
       </div>
 
       <div class="checkout-content">
-        ${this.isBasketEmpty() ? html`
+        ${this.currentStep === 0 && this.isBasketEmpty() ? html`
           <p>Nothing in basket</p>
           <checkout-button @click=${() => alert('back to homepage')}>Go back to homepage</checkout-button>
         ` : this.getHtmlStep()}
