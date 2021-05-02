@@ -1,5 +1,4 @@
 import { LitElement, html } from '@lion/core';
-import { ajax } from '@lion/ajax';
 import './components/checkout-overview';
 import './components/checkout-steps';
 import './components/checkout-step';
@@ -45,28 +44,6 @@ class LionCheckout extends LitElement {
     this.addEventListener('enableNextStep', () => {
       this.disableButton = false;
     });
-  }
-
-  /**
-   * Get basket content.
-   * @returns Promise<object>
-   */
-  async fetchBasket() {
-    const response = await ajax.requestJson('./mock-data.json');
-    return response.body;
-  }
-
-
-  /**
-   * Get the basket data on load.
-   */
-   async firstUpdated() {
-    try {
-      this.basket = await this.fetchBasket();
-    } catch (error) {
-      // TODO: handle error
-      console.log(error);
-    }
   }
 
     /**
@@ -143,7 +120,7 @@ class LionCheckout extends LitElement {
           ?disabled=${this.disableButton}
           ?hidden=${this.currentStep === LionCheckout.steps.length - 1}
         >
-          Next
+          ${this.currentStep === 2 ? `Confirm` : `Next` }
         </checkout-button>
       </div>
     `
