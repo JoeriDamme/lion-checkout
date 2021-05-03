@@ -58,6 +58,8 @@ export class CheckoutOverview extends LitElement {
       ++item.quantity;
     }
 
+    this.updateBasketSummary();
+    this.emitBasketUpdate();
     this.requestUpdate();
   }
 
@@ -72,6 +74,8 @@ export class CheckoutOverview extends LitElement {
       --item.quantity;
     }
 
+    this.updateBasketSummary();
+    this.emitBasketUpdate();
     this.requestUpdate();
   }
 
@@ -81,6 +85,8 @@ export class CheckoutOverview extends LitElement {
    */
   handleRemove(productId) {
     this.data.basket = this.data.basket.filter(item => item.productId !== productId);
+    this.updateBasketSummary();
+    this.emitBasketUpdate();
     this.requestUpdate();
   }
 
@@ -91,6 +97,27 @@ export class CheckoutOverview extends LitElement {
    */
   getBasketItem(productId) {
     return this.data.basket.find(item => item.productId === productId);
+  }
+
+  /**
+   * Update the basket summary.
+   */
+  updateBasketSummary() {
+    const totalPrice = this.data.basket.map(item => item.price * item.quantity).reduce((total, price) => total + price);
+    this.data.basketSummary.price = totalPrice;
+    this.data.basketSummary.totalPrice = this.data.basketSummary.extraCostValue + this.data.basketSummary.price;
+  }
+
+  /**
+   * Emit event that basket has been updated.
+   */
+  emitBasketUpdate() {
+    this.dispatchEvent(new CustomEvent('basketUpdate', {
+      composed: true,
+      detail: {
+        basket: this.data,
+      }
+    }));
   }
 
   render() {
@@ -116,7 +143,7 @@ export class CheckoutOverview extends LitElement {
                     </small>
                   </div>
                 </td>
-                <td>Points: ${item.price}</td>
+                <td>Points: ${item.price * item.quantity}</td>
                 <td>
                   <lion-button @click=${() => this.handleRemove(item.productId)}>Remove</lion-button>
                 </td>

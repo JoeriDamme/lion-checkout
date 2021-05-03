@@ -51,7 +51,7 @@ export class CheckoutConfirmation extends LitElement {
                   <div><strong>${item.title}</strong></div>
                   <div><small>Quantity: ${item.quantity}</small></div>
                 </td>
-                <td>${item.price}</td>
+                <td>${item.price * item.quantity}</td>
               </tr>
               `)}
             </tbody>
