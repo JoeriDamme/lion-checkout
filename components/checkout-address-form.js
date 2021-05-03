@@ -1,5 +1,5 @@
 import { LitElement, html } from '@lion/core';
-import { Required } from '@lion/form-core';
+import { Required, IsEmail } from '@lion/form-core';
 import { loadDefaultFeedbackMessages } from '@lion/validate-messages';
 import { ajax } from '@lion/ajax';
 import '@lion/input/define';
@@ -23,6 +23,7 @@ export class CheckoutAddressForm extends LitElement {
     super();
     loadDefaultFeedbackMessages();
     this.onlyVoucher = false;
+    this.data = {};
     this.formData = {
       street: '',
       houseNumber: '',
@@ -102,8 +103,23 @@ export class CheckoutAddressForm extends LitElement {
    * Handle the input changes.
    */
   handleChange() {
+    // @model-value-changed is fired while rendering?
+    // let's wait for data.
+    if (Object.keys(this.data).length === 0 && this.data.constructor === Object) {
+      return;
+    }
+
     const valid = this.validate();
     const nameEvent = valid ? 'enableNextStep' : 'disableNextStep';
+
+    this.formData = {
+      street: this.shadowRoot.querySelector('lion-input[name=street]').value,
+      houseNumber: this.shadowRoot.querySelector('lion-input[name=houseNumber]').value,
+      houseNumberAddition: this.shadowRoot.querySelector('lion-input[name=houseNumberAddition]').value,
+      postalCode: this.shadowRoot.querySelector('lion-input[name=postalCode]').value,
+      city: this.shadowRoot.querySelector('lion-input[name=city]').value,
+      email: this.shadowRoot.querySelector('lion-input[name=email]').value,
+    }
 
     this.dispatchEvent(new CustomEvent(nameEvent, {
       composed: true,
@@ -164,7 +180,7 @@ export class CheckoutAddressForm extends LitElement {
                   label="Email Address"
                   .modelValue=${this.formData.email}
                   @model-value-changed=${() => this.handleChange()}
-                  .validators="${[new Required()]}">
+                  .validators="${[new Required(), new IsEmail() ]}">
                 </lion-input>
               </lion-fieldset>
             </form>

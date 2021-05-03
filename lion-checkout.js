@@ -18,6 +18,10 @@ class LionCheckout extends LitElement {
 
   static get styles() {
     return css`
+      :host {
+        font-family: Arial, sans-serif;
+      }
+
       :host .checkout-content {
         margin-bottom: 10px;
       }
@@ -109,6 +113,9 @@ class LionCheckout extends LitElement {
   }
 
 
+  /**
+   * Handle previous click action.
+   */
   handlePreviousStepClick() {
     const checkoutSteps = this.shadowRoot.querySelector('checkout-steps');
     // go to previous step
@@ -117,15 +124,25 @@ class LionCheckout extends LitElement {
     this.currentStep = checkoutSteps.current;
   }
 
-  handleNextStepClick() {
+  /**
+   * Handle next click action.
+   */
+  async handleNextStepClick() {
     const checkoutSteps = this.shadowRoot.querySelector('checkout-steps');
 
     // get data from every step
     if (this.currentStep === 1) {
+      // address step done
       // get address information
       const element = this.shadowRoot.querySelector('checkout-address-form');
       // information is stored in the property formData
       this.stepData['address'] = element.formData;
+      console.log(this.stepData);
+    } else if (this.currentStep === 2) {
+      // payment step done
+      const element = this.shadowRoot.querySelector('checkout-payment-form');
+      this.stepData['selectedAccount'] = element.selectedAccount;
+      await this.postOrderBasket();
     }
 
     // go to next step
@@ -163,15 +180,21 @@ class LionCheckout extends LitElement {
 
   /**
    * Get basket content.
+   * @todo: Move to servive file.
    * @returns Promise<object>
    */
   async fetchBasket() {
-    const response = await ajax.requestJson('../mock-data.json');
-    return response.body;
+    try {
+      const response = await ajax.requestJson('../mock-data.json');
+      return response.body;
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   /**
    * Fake call to reserve basket.
+   * @todo: Move to servive file.
    */
   async patchReservationBasket() {
     try {
@@ -183,6 +206,27 @@ class LionCheckout extends LitElement {
         },
         body: JSON.stringify({
           reserve: true,
+        })
+      });
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+    /**
+     * Fake call to reserve basket.
+     * @todo: Move to servive file.
+     */
+  async postOrderBasket() {
+    try {
+      await ajax.request('http://localhost/api/basket/order', {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer some_random_jwt',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accountId: this.stepData['selectedAccount'].accountId,
         })
       });
     } catch (e) {
