@@ -44,12 +44,12 @@ export class CheckoutConfirmation extends LitElement {
     this.orderByDeliveryTime();
   }
 
+  /**
+   * Order the basket items by delivery time/
+   */
   orderByDeliveryTime() {
     this.groupedDelivery = groupBy(this.basketData.basket, 'deliveryTime');
-    console.log(this.groupedDelivery);
   }
-
-  
 
   render() {
     return html`

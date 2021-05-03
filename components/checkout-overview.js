@@ -38,6 +38,9 @@ export class CheckoutOverview extends LitElement {
     return {
       data: {
         type: Object
+      },
+      discount: {
+        type: Number
       }
     }
   }
@@ -163,6 +166,10 @@ export class CheckoutOverview extends LitElement {
           <div>
             <strong>Extra Costs</strong>
             <div><span>Points:</span><span>${this.data.basketSummary && this.data.basketSummary.extraCostValue}</span></div>
+          </div>
+          <div>
+            <strong>Discount:</strong>
+            <div><span>${this.discount} %</span></div>
             <hr>
           </div>
           <div>

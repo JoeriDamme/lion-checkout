@@ -38,6 +38,9 @@ class LionCheckout extends LitElement {
       disableButton: {
         type: Boolean
       },
+      discount: {
+        type: Number,
+      }
     }
   }
 
@@ -54,6 +57,9 @@ class LionCheckout extends LitElement {
 
     // will keep track of data of every step
     this.stepData = {};
+
+    // keep track of discount percentage.
+    this.discount = 0;
 
     this.addEventListener('disableNextStep', () => {
       this.disableButton = true;
@@ -78,7 +84,7 @@ class LionCheckout extends LitElement {
    */
   getHtmlStep() {
     let result = html`
-      <checkout-overview .data=${this.basketData}></checkout-overview>
+      <checkout-overview .data=${this.basketData} .discount=${this.discount}></checkout-overview>
     `;
 
     switch(this.currentStep) {
@@ -94,7 +100,7 @@ class LionCheckout extends LitElement {
         break;
       case 3: 
         result = html`
-          <checkout-confirmation .basketData=${this.basketData} .address=${this.stepData.address }></checkout-confirmation>
+          <checkout-confirmation .basketData=${this.basketData} .address=${this.stepData.address } .discount=${this.discount}></checkout-confirmation>
         `;
         break;
     }
@@ -137,6 +143,12 @@ class LionCheckout extends LitElement {
       // sort on fulfillmentType
       data.basket = sortBy(data.basket, 'fulfillmentType');
       this.basketData = data;
+
+      this.discount = this.getDiscount();
+      if (this.discount) {
+        const currentTotalPrice = this.basketData.basketSummary.totalPrice;
+        this.basketData.basketSummary.totalPrice =  Math.floor(currentTotalPrice - ( currentTotalPrice / 100 * this.discount ));
+      }
     } catch (error) {
       // TODO: handle error
       console.log(error);
@@ -184,6 +196,17 @@ class LionCheckout extends LitElement {
    */
   hasOnlyVoucher() {
     return !this.basketData.basket.filter(item => item.fulfillmentType !== 'VOUCHER').length
+  }
+
+  /**
+   * Check if discount is required.
+   * When 3 or more SKUs, discount approved.
+   * The reason to do it here (and not in checkout-overview) is that maybe in the future, the discount is not only based on SKUs.
+   * @returns {Number} discount percentage.
+   */
+  getDiscount() {
+    const uniqueSkus = [...new Set(this.basketData.basket.map(obj => obj.skuId))];
+    return uniqueSkus.length >= 3 ? 10 : 0;
   }
 
   render() {
