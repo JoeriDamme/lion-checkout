@@ -1,4 +1,5 @@
 import { LitElement, html, css } from '@lion/core';
+import { groupBy } from '../utils/utils'
 
 export class CheckoutConfirmation extends LitElement {
   static get styles() {
@@ -25,6 +26,9 @@ export class CheckoutConfirmation extends LitElement {
       },
       address: {
         type: Object
+      },
+      groupedDelivery: {
+        type: Object,
       }
     }
   }
@@ -33,7 +37,19 @@ export class CheckoutConfirmation extends LitElement {
     super();
     this.basketData = {};
     this.address = {};
+    this.groupedDelivery = {};
   }
+
+  firstUpdated() {
+    this.orderByDeliveryTime();
+  }
+
+  orderByDeliveryTime() {
+    this.groupedDelivery = groupBy(this.basketData.basket, 'deliveryTime');
+    console.log(this.groupedDelivery);
+  }
+
+  
 
   render() {
     return html`
@@ -42,20 +58,23 @@ export class CheckoutConfirmation extends LitElement {
       <h2>Here is a summary of your order:</h2>
       <div class="row">
         <div class="col-xs-12 col-md-8">
-          <table>
-            <tbody>
-              ${this.basketData.basket && this.basketData.basket.map(item => html`
-              <tr>
-                <td><img src="./img${item.mediaUrl}" /></td>
-                <td>
-                  <div><strong>${item.title}</strong></div>
-                  <div><small>Quantity: ${item.quantity}</small></div>
-                </td>
-                <td>${item.price * item.quantity}</td>
-              </tr>
-              `)}
-            </tbody>
-          </table>
+          ${Object.entries(this.groupedDelivery).map(([index, value]) => html`
+            <h2>${index}</h2>
+            <table>
+                <tbody>
+                  ${value.map(item => html`
+                  <tr>
+                    <td><img src="./img${item.mediaUrl}" /></td>
+                    <td>
+                      <div><strong>${item.title}</strong></div>
+                      <div><small>Quantity: ${item.quantity}</small></div>
+                    </td>
+                    <td>${item.price * item.quantity}</td>
+                  </tr>
+                  `)}
+                </tbody>
+              </table>
+          `)}
         </div>
       </div>
 

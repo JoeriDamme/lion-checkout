@@ -7,6 +7,7 @@ import './components/checkout-address-form';
 import './components/checkout-payment-form';
 import './components/checkout-confirmation';
 import { ajax } from '@lion/ajax';
+import { sortBy } from './utils/utils'
 
 class LionCheckout extends LitElement {
 
@@ -128,22 +129,13 @@ class LionCheckout extends LitElement {
   }
 
   /**
-   * Sort array by key. Native solution from Lodash.
-   * @param {string} key 
-   * @returns {Array} sorted array by key.
-   */
-  sortBy(arr, key) {
-    return arr.concat().sort((a, b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0));
-  }
-
-  /**
    * Get the basket data on load.
    */
   async firstUpdated() {
     try {
       const data = await this.fetchBasket();
       // sort on fulfillmentType
-      data.basket = this.sortBy(data.basket, 'fulfillmentType');
+      data.basket = sortBy(data.basket, 'fulfillmentType');
       this.basketData = data;
     } catch (error) {
       // TODO: handle error
