@@ -1,4 +1,4 @@
-import { LitElement, html } from '@lion/core';
+import { LitElement, html, css } from '@lion/core';
 import { Required, IsEmail } from '@lion/form-core';
 import { loadDefaultFeedbackMessages } from '@lion/validate-messages';
 import { ajax } from '@lion/ajax';
@@ -7,6 +7,22 @@ import '@lion/fieldset/define';
 import '@lion/form/define';
 
 export class CheckoutAddressForm extends LitElement {
+
+  static get styles() {
+    return css`
+      :host input { margin-bottom: 10px; }
+
+      :host input[type=text] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+    `
+  }
 
   /**
    * Get properties.
@@ -130,8 +146,9 @@ export class CheckoutAddressForm extends LitElement {
     return html`
       <link rel="stylesheet" href="../node_modules/flexboxgrid/css/flexboxgrid.css" type="text/css"> 
       <h1>Shipping Address</h1>
+      <hr>
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-md-4">
           <lion-form>
             <form>
               <lion-fieldset name="checkoutAddress">

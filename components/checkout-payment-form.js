@@ -110,14 +110,15 @@ export class CheckoutPaymentForm extends LitElement {
       <div class="row">
         <div class="col-xs-12">
           <h1>Choose a payment method</h1>
+          <hr>
           <checkout-select-bank-account 
             .options=${this.accounts} 
           >
           </checkout-select-bank-account>
-          <p><span>The balance for this account is: </span><span>${this.selectedAccount && this.selectedAccount.balance}</span></p>
+          <p><span>The balance for this account is: </span><span><strong>${this.selectedAccount && this.selectedAccount.balance}</strong></span></p>
 
           ${this.selectedAccount && !this.hasBalance() ? html `
-            <div class="alert alert-danger">Unsufficient balance. Please select a different account</div>
+            <div class="col-md-6 alert alert-danger">Unsufficient balance. Please select a different account</div>
           ` : html``}
         </div>
       </div>

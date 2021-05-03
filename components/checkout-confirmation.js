@@ -55,11 +55,12 @@ export class CheckoutConfirmation extends LitElement {
     return html`
       <link rel="stylesheet" href="../node_modules/flexboxgrid/css/flexboxgrid.css" type="text/css">
       <h1>Thank you for your order!</h1>
+      <hr>
       <h2>Here is a summary of your order:</h2>
       <div class="row">
         <div class="col-xs-12 col-md-8">
           ${Object.entries(this.groupedDelivery).map(([index, value]) => html`
-            <h2>${index}</h2>
+            <h3>${index}</h3>
             <table>
                 <tbody>
                   ${value.map(item => html`
@@ -77,12 +78,12 @@ export class CheckoutConfirmation extends LitElement {
           `)}
         </div>
       </div>
-
+      <hr>
       <h2>Your order will be send to:</h2>
-      <p>Street: ${this.address.street} ${this.address.houseNumber}${this.address.houseNumberAddition}</p>
-      <p>Postcal Code: ${this.address.postalCode}</p>
-      <p>City: ${this.address.city}</p>
-      <p>Email: ${this.address.email}</p>
+      <p>Street: <strong>${this.address.street} ${this.address.houseNumber}${this.address.houseNumberAddition}</strong></p>
+      <p>Postcal Code: <strong>${this.address.postalCode}</strong></p>
+      <p>City: <strong>${this.address.city}</strong></p>
+      <p>Email: <strong>${this.address.email}</strong></p>
     `;
   }
 }
