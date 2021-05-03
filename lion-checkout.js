@@ -65,9 +65,13 @@ class LionCheckout extends LitElement {
     this.addEventListener('reserveBasket', async () => {
       await this.patchReservationBasket()
     });
+
+    this.addEventListener('basketUpdate', (e) => {
+      this.basketData = e.detail.basket;
+    });
   }
 
-    /**
+  /**
    * Load the HTML for the current step in the checkout flow.
    * @returns TemplateResult
    */
