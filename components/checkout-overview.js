@@ -1,4 +1,5 @@
 import { LitElement, css, html } from '@lion/core';
+import '@lion/button/define';
 
 export class CheckoutOverview extends LitElement {
 
@@ -46,6 +47,20 @@ export class CheckoutOverview extends LitElement {
     this.data = {};
   }
 
+  handleIncrease(productId) {
+    console.log('increase', productId);
+  }
+
+  handleDecrease(productId) {
+    console.log('decrease', productId);
+
+  }
+
+  handleRemove(productId) {
+    console.log('remove', productId);
+
+  }
+
   render() {
     return html`
     <link rel="stylesheet" href="../node_modules/flexboxgrid/css/flexboxgrid.css" type="text/css">
@@ -61,10 +76,18 @@ export class CheckoutOverview extends LitElement {
                 <td><img src="./img${item.mediaUrl}" /></td>
                 <td>
                   <div><strong>${item.title}</strong></div>
-                  <div><small>Quantity: ${item.quantity}</small></div>
+                  <div>
+                    <small>Quantity: 
+                      <lion-button @click=${() => this.handleDecrease(item.productId)} ?disabled=${item.quantity <= 1}>-</lion-button>
+                       ${item.quantity} 
+                      <lion-button @click=${() => this.handleIncrease(item.productId)} ?disabled=${item.quantity >= item.availableStock}>+</lion-button>
+                    </small>
+                  </div>
                 </td>
-                <td>${item.price}</td>
-                <td>delete</td>
+                <td>Points: ${item.price}</td>
+                <td>
+                  <lion-button @click=${() => this.handleRemove(item.productId)}>Remove</lion-button>
+                </td>
               </tr>
               `)}
             </tbody>
