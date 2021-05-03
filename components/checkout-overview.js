@@ -47,18 +47,50 @@ export class CheckoutOverview extends LitElement {
     this.data = {};
   }
 
+  /**
+   * Increase product count.
+   * @param {Number} productId 
+   */
   handleIncrease(productId) {
-    console.log('increase', productId);
+    const item = this.getBasketItem(productId);
+
+    if (item.quantity < item.availableStock) {
+      ++item.quantity;
+    }
+
+    this.requestUpdate();
   }
 
+  /**
+   * Decrease product count.
+   * @param {Number} productId 
+   */
   handleDecrease(productId) {
-    console.log('decrease', productId);
+    const item = this.getBasketItem(productId);
 
+    if (item.quantity > 1) {
+      --item.quantity;
+    }
+
+    this.requestUpdate();
   }
 
+  /**
+   * Remove product.
+   * @param {Number} productId 
+   */
   handleRemove(productId) {
-    console.log('remove', productId);
+    this.data.basket = this.data.basket.filter(item => item.productId !== productId);
+    this.requestUpdate();
+  }
 
+  /**
+   * Get a product from basket array.
+   * @param {Number} productId 
+   * @returns {Object}
+   */
+  getBasketItem(productId) {
+    return this.data.basket.find(item => item.productId === productId);
   }
 
   render() {
