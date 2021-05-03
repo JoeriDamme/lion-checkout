@@ -101,7 +101,6 @@ export class CheckoutPaymentForm extends LitElement {
    * @returns {Boolean}
    */
   hasBalance() {
-    console.log(this.selectedAccount);
     return this.totalPrice < this.selectedAccount.balance;
   }
 
